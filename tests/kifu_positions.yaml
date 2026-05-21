@@ -1,0 +1,210 @@
+positions:
+  - name: kihu_20260519_184324_move82
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-19 184324.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-19 184324.txt"
+    config: config_taikyoku.yaml
+    move_number: 82
+    sfen_move_number: 1
+
+  - name: kihu_20260519_184419_move131
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-19 184419.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-19 184419.txt"
+    config: config_taikyoku.yaml
+    move_number: 131
+    sfen_move_number: 1
+
+  - name: kihu_20260519_184509_move84
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-19 184509.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-19 184509.txt"
+    config: config_taikyoku.yaml
+    move_number: 84
+    sfen_move_number: 1
+
+  - name: kihu_20260519_184548_move114
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-19 184548.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-19 184548.txt"
+    config: config_taikyoku.yaml
+    move_number: 114
+    sfen_move_number: 1
+
+  - name: kihu_20260519_184700_move125
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-19 184700.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-19 184700.txt"
+    config: config_taikyoku.yaml
+    move_number: 125
+    sfen_move_number: 1
+
+  - name: kihu_20260519_184740_move53
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-19 184740.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-19 184740.txt"
+    config: config_taikyoku.yaml
+    move_number: 53
+    sfen_move_number: 1
+
+  - name: kihu_20260519_184811_move69
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-19 184811.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-19 184811.txt"
+    config: config_taikyoku.yaml
+    move_number: 69
+    sfen_move_number: 1
+
+  - name: kihu_20260519_184834_move125
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-19 184834.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-19 184834.txt"
+    config: config_taikyoku.yaml
+    move_number: 125
+    sfen_move_number: 1
+
+  - name: kihu_20260519_184856_move110
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-19 184856.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-19 184856.txt"
+    config: config_taikyoku.yaml
+    move_number: 110
+    sfen_move_number: 1
+
+  - name: kihu_20260519_184922_move120
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-19 184922.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-19 184922.txt"
+    config: config_taikyoku.yaml
+    move_number: 120
+    sfen_move_number: 1
+
+  - name: kihu_20260521_134051_move96
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-21 134051.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-21 134051.txt"
+    config: config_taikyoku.yaml
+    move_number: 96
+    sfen_move_number: 1
+
+  - name: kihu_20260521_134125_move55
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-21 134125.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-21 134125.txt"
+    config: config_taikyoku.yaml
+    move_number: 55
+    sfen_move_number: 1
+
+  - name: kihu_20260521_134155_move109
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-21 134155.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-21 134155.txt"
+    config: config_taikyoku.yaml
+    move_number: 109
+    sfen_move_number: 1
+
+  - name: kihu_20260521_134224_move82
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-21 134224.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-21 134224.txt"
+    config: config_taikyoku.yaml
+    move_number: 82
+    sfen_move_number: 1
+
+  - name: kihu_20260521_134252_move71
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-21 134252.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-21 134252.txt"
+    config: config_taikyoku.yaml
+    move_number: 71
+    sfen_move_number: 1
+
+  - name: kihu_20260521_134315_move116
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-21 134315.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-21 134315.txt"
+    config: config_taikyoku.yaml
+    move_number: 116
+    sfen_move_number: 1
+
+  - name: kihu_20260521_134340_move139
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-21 134340.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-21 134340.txt"
+    config: config_taikyoku.yaml
+    move_number: 139
+    sfen_move_number: 1
+
+  - name: kihu_20260521_134408_move111
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-21 134408.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-21 134408.txt"
+    config: config_taikyoku.yaml
+    move_number: 111
+    sfen_move_number: 1
+
+  - name: kihu_20260521_134438_move107
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-21 134438.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-21 134438.txt"
+    config: config_taikyoku.yaml
+    move_number: 107
+    sfen_move_number: 1
+
+  - name: kihu_20260521_134508_move137
+    image: "kihu_tests/確認済/スクリーンショット 2026-05-21 134508.png"
+    kifu: "kihu_tests/確認済/スクリーンショット 2026-05-21 134508.txt"
+    config: config_taikyoku.yaml
+    move_number: 137
+    sfen_move_number: 1
+
+  - name: kihu_20260521_140042_move109
+    image: "kihu_tests/スクリーンショット 2026-05-21 140042.png"
+    kifu: "kihu_tests/スクリーンショット 2026-05-21 140042.txt"
+    config: config_taikyoku.yaml
+    move_number: 109
+    sfen_move_number: 1
+
+  - name: kihu_20260521_140111_move113
+    image: "kihu_tests/スクリーンショット 2026-05-21 140111.png"
+    kifu: "kihu_tests/スクリーンショット 2026-05-21 140111.txt"
+    config: config_taikyoku.yaml
+    move_number: 113
+    sfen_move_number: 1
+
+  - name: kihu_20260521_140222_move130
+    image: "kihu_tests/スクリーンショット 2026-05-21 140222.png"
+    kifu: "kihu_tests/スクリーンショット 2026-05-21 140222.txt"
+    config: config_taikyoku.yaml
+    move_number: 130
+    sfen_move_number: 1
+
+  - name: kihu_20260521_140247_move112
+    image: "kihu_tests/スクリーンショット 2026-05-21 140247.png"
+    kifu: "kihu_tests/スクリーンショット 2026-05-21 140247.txt"
+    config: config_taikyoku.yaml
+    move_number: 112
+    sfen_move_number: 1
+
+  - name: kihu_20260521_140311_move97
+    image: "kihu_tests/スクリーンショット 2026-05-21 140311.png"
+    kifu: "kihu_tests/スクリーンショット 2026-05-21 140311.txt"
+    config: config_taikyoku.yaml
+    move_number: 97
+    sfen_move_number: 1
+
+  - name: kihu_20260521_140346_move107
+    image: "kihu_tests/スクリーンショット 2026-05-21 140346.png"
+    kifu: "kihu_tests/スクリーンショット 2026-05-21 140346.txt"
+    config: config_taikyoku.yaml
+    move_number: 107
+    sfen_move_number: 1
+
+  - name: kihu_20260521_140407_move151
+    image: "kihu_tests/スクリーンショット 2026-05-21 140407.png"
+    kifu: "kihu_tests/スクリーンショット 2026-05-21 140407.txt"
+    config: config_taikyoku.yaml
+    move_number: 151
+    sfen_move_number: 1
+
+  - name: kihu_20260521_140431_move129
+    image: "kihu_tests/スクリーンショット 2026-05-21 140431.png"
+    kifu: "kihu_tests/スクリーンショット 2026-05-21 140431.txt"
+    config: config_taikyoku.yaml
+    move_number: 129
+    sfen_move_number: 1
+
+  - name: kihu_20260521_140458_move115
+    image: "kihu_tests/スクリーンショット 2026-05-21 140458.png"
+    kifu: "kihu_tests/スクリーンショット 2026-05-21 140458.txt"
+    config: config_taikyoku.yaml
+    move_number: 115
+    sfen_move_number: 1
+
+  - name: kihu_20260521_140520_move132
+    image: "kihu_tests/スクリーンショット 2026-05-21 140520.png"
+    kifu: "kihu_tests/スクリーンショット 2026-05-21 140520.txt"
+    config: config_taikyoku.yaml
+    move_number: 132
+    sfen_move_number: 1

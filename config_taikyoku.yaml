@@ -1,0 +1,72 @@
+# Coordinates for sample_images/対局例 screenshots.
+# These observer/replay screenshots have the board and hands shifted upward.
+board:
+  top_left: [7, 288]
+  width: 570
+  height: 621
+
+recognition:
+  pieces_dir: templates/pieces
+  hand_digits_dir: templates/hand_digits
+  piece_threshold: 0.72
+  hand_piece_threshold: 0.70
+  hand_presence_threshold: 0.45
+  digit_threshold: 0.70
+  empty_threshold: 0.30
+  match_size: [64, 64]
+  cell_crop_margin: 2
+  slot_crop_margin: 0
+  mode: color
+
+hands:
+  black:
+    rect: [0, 916, 470, 76]
+    relative_to: hand
+    slots:
+      - piece: P
+        rect: [8, 0, 58, 68]
+        digit_rect: [47, 40, 28, 30]
+      - piece: L
+        rect: [72, 0, 58, 68]
+        digit_rect: [111, 40, 28, 30]
+      - piece: N
+        rect: [136, 0, 58, 68]
+        digit_rect: [175, 40, 28, 30]
+      - piece: S
+        rect: [199, 0, 58, 68]
+        digit_rect: [238, 40, 28, 30]
+      - piece: G
+        rect: [263, 0, 58, 68]
+        digit_rect: [302, 40, 28, 30]
+      - piece: B
+        rect: [326, 0, 58, 68]
+        digit_rect: [365, 40, 28, 30]
+      - piece: R
+        rect: [390, 0, 58, 68]
+        digit_rect: [429, 40, 28, 30]
+
+  white:
+    rect: [100, 208, 485, 76]
+    relative_to: hand
+    slots:
+      - piece: P
+        rect: [28, 0, 58, 68]
+        digit_rect: [28, 0, 42, 38]
+      - piece: L
+        rect: [92, 0, 58, 68]
+        digit_rect: [92, 0, 42, 38]
+      - piece: N
+        rect: [156, 0, 58, 68]
+        digit_rect: [156, 0, 42, 38]
+      - piece: S
+        rect: [220, 0, 58, 68]
+        digit_rect: [220, 0, 42, 38]
+      - piece: G
+        rect: [284, 0, 58, 68]
+        digit_rect: [284, 0, 42, 38]
+      - piece: B
+        rect: [348, 0, 58, 68]
+        digit_rect: [348, 0, 42, 38]
+      - piece: R
+        rect: [412, 0, 58, 68]
+        digit_rect: [412, 0, 42, 38]

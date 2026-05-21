@@ -1,0 +1,11 @@
+positions:
+  - name: taikyoku_032440
+    image: sample_images/対局例/スクリーンショット 2026-05-19 032440.png
+    config: config_taikyoku.yaml
+    turn: b
+    sfen: l6nl/1s1+B+P2+B1/1p6p/p1P1s1k2/3P5/P4G3/1P3P2P/K1+sS5/L1S3rrL b G7P2g2np 1
+  - name: taikyoku_032457
+    image: sample_images/対局例/スクリーンショット 2026-05-19 032457.png
+    config: config_taikyoku.yaml
+    turn: b
+    sfen: l5b2/1kggr3l/1pns1ppP1/p1pp1s1RP/4p3p/P1PP1PP2/1PNGSS3/1KGB5/L7L b NPnp 1
