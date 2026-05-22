@@ -1,0 +1,88 @@
+# Coordinates for raw Android screenshots captured with:
+#   adb exec-out screencap -p
+#
+# Current device override size:
+#   1080x2400
+#
+# This differs from desktop/scrcpy-window screenshots because the Windows
+# title bar and scaling are not present.
+board:
+  top_left: [11, 499]
+  width: 1059
+  height: 1151
+
+recognition:
+  pieces_dir: templates/pieces
+  hand_digits_dir: templates/hand_digits
+  # Live ADB frames may include the app's red move highlight or transition
+  # effects. Keep this slightly lower than the scrcpy-window config.
+  # ADB captures may include move highlights/transitions. Low-score confirmed
+  # cases should be added as templates before lowering this further.
+  piece_threshold: 0.68
+  # Raw ADB screenshots score lower for hand pieces than scrcpy-window
+  # screenshots. Current live samples include a black bishop at 0.665.
+  hand_piece_threshold: 0.62
+  hand_presence_threshold: 0.45
+  # Low-score confirmed digit cases should be added as templates before
+  # lowering this further.
+  digit_threshold: 0.70
+  # Raw device screenshots have a different interpolation/noise profile from
+  # scrcpy-window captures, so empty cells score lower against old templates.
+  empty_threshold: 0.15
+  match_size: [64, 64]
+  cell_crop_margin: 2
+  slot_crop_margin: 0
+  mode: color
+
+hands:
+  black:
+    rect: [0, 1663, 874, 141]
+    relative_to: hand
+    slots:
+      - piece: P
+        rect: [15, 0, 108, 126]
+        digit_rect: [87, 74, 52, 56]
+      - piece: L
+        rect: [134, 0, 108, 126]
+        digit_rect: [206, 74, 52, 56]
+      - piece: N
+        rect: [253, 0, 108, 126]
+        digit_rect: [325, 74, 52, 56]
+      - piece: S
+        rect: [370, 0, 108, 126]
+        digit_rect: [442, 74, 52, 56]
+      - piece: G
+        rect: [489, 0, 108, 126]
+        digit_rect: [561, 74, 52, 56]
+      - piece: B
+        rect: [606, 0, 108, 126]
+        digit_rect: [678, 74, 52, 56]
+      - piece: R
+        rect: [725, 0, 108, 126]
+        digit_rect: [797, 74, 52, 56]
+
+  white:
+    rect: [186, 351, 901, 141]
+    relative_to: hand
+    slots:
+      - piece: P
+        rect: [52, 0, 108, 126]
+        digit_rect: [52, 0, 78, 70]
+      - piece: L
+        rect: [171, 0, 108, 126]
+        digit_rect: [171, 0, 78, 70]
+      - piece: N
+        rect: [290, 0, 108, 126]
+        digit_rect: [290, 0, 78, 70]
+      - piece: S
+        rect: [409, 0, 108, 126]
+        digit_rect: [409, 0, 78, 70]
+      - piece: G
+        rect: [528, 0, 108, 126]
+        digit_rect: [528, 0, 78, 70]
+      - piece: B
+        rect: [647, 0, 108, 126]
+        digit_rect: [647, 0, 78, 70]
+      - piece: R
+        rect: [766, 0, 108, 126]
+        digit_rect: [766, 0, 78, 70]

@@ -103,6 +103,7 @@ class PieceRecognizer:
     def __init__(self, config: RecognitionConfig):
         self.config = config
         self.templates = self._load_templates(config.pieces_dir)
+        self._template_matrix = self._build_template_matrix()
 
     def recognize(self, image, threshold: float | None = None, include_scores: bool = False) -> RecognitionResult:
         if not self.templates:
@@ -118,28 +119,34 @@ class PieceRecognizer:
         if parsed.is_empty:
             empty_threshold = self.config.empty_threshold if threshold is None else threshold
             if score < empty_threshold:
+                if self._looks_empty_cell(image):
+                    return RecognitionResult(label=label, piece=None, score=score, is_empty=True, scores=score_map)
                 return RecognitionResult(label=label, piece=None, score=score, scores=score_map)
             return RecognitionResult(label=label, piece=None, score=score, is_empty=True, scores=score_map)
         threshold_value = self.config.piece_threshold if threshold is None else threshold
         if score < threshold_value:
+            if self._looks_empty_cell(image):
+                return RecognitionResult(label="empty", piece=None, score=score, is_empty=True, scores=score_map)
             return RecognitionResult(label=label, piece=None, score=score, scores=score_map)
         if parsed.side and parsed.kind:
             return RecognitionResult(label=label, piece=Piece(parsed.side, parsed.kind), score=score, scores=score_map)
         return RecognitionResult(label=label, piece=None, score=score, scores=score_map)
 
     def score_all(self, image) -> dict[str, float]:
-        target = self._prepare(image)
+        template_scores = self._score_all_templates(image)
         scores: dict[str, float] = {}
-        for template in self.templates:
-            score = self._score(target, template.image)
+        for template, score_value in zip(self.templates, template_scores):
+            score = float(score_value)
+            if np.isnan(score):
+                score = -1.0
             if template.label not in scores or score > scores[template.label]:
                 scores[template.label] = score
         return scores
 
     def max_score_for(self, image, side: str | None = None, kind: str | None = None, empty: bool = False) -> float:
-        target = self._prepare(image)
+        template_scores = self._score_all_templates(image)
         best = -1.0
-        for template in self.templates:
+        for template, score_value in zip(self.templates, template_scores):
             parsed = template.parsed
             if empty:
                 if not parsed.is_empty:
@@ -151,7 +158,9 @@ class PieceRecognizer:
                     continue
                 if kind is not None and parsed.kind != kind:
                     continue
-            best = max(best, self._score(target, template.image))
+            score = float(score_value)
+            if not np.isnan(score):
+                best = max(best, score)
         return best
 
     def labels_for(self, side: str | None = None, kind: str | None = None) -> list[str]:
@@ -181,6 +190,31 @@ class PieceRecognizer:
             image = self._prepare(read_image(path))
             templates.append(Template(label=label, parsed=parsed, path=path, image=image))
         return templates
+
+    def _build_template_matrix(self):
+        if not self.templates:
+            return np.empty((0, 0), dtype=np.float32)
+        vectors = [self._normalize_for_match(template.image) for template in self.templates]
+        return np.vstack(vectors)
+
+    def _score_all_templates(self, image):
+        if self._template_matrix.size == 0:
+            return np.empty((0,), dtype=np.float32)
+        target = self._normalize_for_match(self._prepare(image))
+        return self._template_matrix @ target
+
+    @staticmethod
+    def _normalize_for_match(image):
+        values = image.astype(np.float32)
+        if values.ndim == 3:
+            values = values - values.mean(axis=(0, 1), keepdims=True)
+        else:
+            values = values - values.mean()
+        vector = values.reshape(-1)
+        norm = float(np.linalg.norm(vector))
+        if norm <= 0.0 or np.isnan(norm):
+            return np.zeros_like(vector, dtype=np.float32)
+        return (vector / norm).astype(np.float32)
 
     def _template_by_label(self, label: str) -> Template:
         for template in self.templates:
@@ -212,6 +246,20 @@ class PieceRecognizer:
         if np.isnan(value):
             return -1.0
         return value
+
+    @staticmethod
+    def _looks_empty_cell(image) -> bool:
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        dark_ratio = float((gray < 80).mean())
+        red_ratio = float(
+            (
+                ((hsv[:, :, 0] < 12) | (hsv[:, :, 0] > 168))
+                & (hsv[:, :, 1] > 70)
+                & (hsv[:, :, 2] > 100)
+            ).mean()
+        )
+        return dark_ratio < 0.075 and red_ratio < 0.02
 
 
 def recognition_piece_to_debug(piece: Piece | None) -> str:
