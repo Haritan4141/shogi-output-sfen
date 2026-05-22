@@ -36,7 +36,7 @@ python -m unittest discover -s tests
 
 ## 現在の作業目的
 
-現在の目的は、棋譜テキストとスクリーンショットのペアを増やし、画像認識SFENが棋譜から復元した局面と一致するか継続検証することです。
+現在の目的は、棋譜テキストとスクリーンショットのペアを増やし、画像認識SFENが棋譜から復元した局面と一致するか継続検証することです。加えて、`shogi-auto-cpu` から ADB raw screenshot 用の SFEN 認識ライブラリとして利用できるように、`config_adb.yaml` と ADB 由来テンプレートを整備しています。
 
 現状:
 - 2026-05-19追加分10盤面と2026-05-21 13時台追加分10盤面は `kihu_tests/確認済/` に移動済み。
@@ -44,6 +44,8 @@ python -m unittest discover -s tests
 - 合計30盤面を `tests/kifu_positions.yaml` に登録済み。
 - 30盤面すべてで、盤面・持ち駒が棋譜復元SFENと一致。
 - `python -m unittest discover -s tests` で30盤面を含む回帰テストを実行できる。
+- `shogi-auto-cpu` から Git submodule として参照されている。
+- `config_adb.yaml` は `1080x2400` の `adb exec-out screencap -p` 画像を前提にした設定。
 
 変更対象の範囲:
 - `templates/pieces/`
@@ -57,6 +59,7 @@ python -m unittest discover -s tests
 主な実装済み機能:
 - `shogi_sfen_reader.py` をCLI入口として実装。
 - `config.yaml` / `config_taikyoku.yaml` で盤面座標、持ち駒領域、スロット、閾値を指定。
+- `config_adb.yaml` で ADB raw screenshot 用の盤面座標、持ち駒領域、スロット、閾値を指定。
 - `src/board_detector.py` で盤面切り出し。
 - `src/cell_extractor.py` で9x9セル切り出し。
 - `src/piece_recognizer.py` で駒・成駒・空マスのテンプレートマッチング認識。
@@ -113,15 +116,28 @@ python -m unittest discover -s tests
     - `templates/pieces/w_+R/kihu_140458_r9c4.png`
 - 追加後、合計30件すべてが棋譜復元局面と一致。
 - `tests/kifu_positions.yaml` を合計30件に更新。
+- 2026-05-22/23 の `shogi-auto-cpu` 自動対局検証で、ADB raw screenshot 向けの追加を実施。
+  - `config_adb.yaml` を追加。
+  - `src/piece_recognizer.py` でテンプレート照合をベクトル化し、空マス fallback を追加。
+  - 追加テンプレート:
+    - `templates/pieces/b_+P/promoted_pawn_low_score_r3c7.png`
+    - `templates/pieces/b_R/black_gold_hand_2_after_rook_capture_b_R_hand.png`
+    - `templates/pieces/w_B/white_bishop_hand_2_w_B_hand.png`
+    - `templates/pieces/w_R/white_rook_hand_after_capture_w_R_hand.png`
+    - `templates/hand_digits/2/black_gold_hand_2_after_rook_capture_b_G.png`
+    - `templates/hand_digits/2/white_bishop_hand_2_w_B.png`
+    - `templates/hand_digits/2/white_gold_hand_2_after_gold_capture_w_G.png`
+    - `templates/hand_digits/4/black_pawn_hand_4_b_P.png`
+  - commit `7e32fb0 Improve ADB screenshot recognition` として `main` に push 済み。
 
 ## 未完了タスク
 
 残っている作業:
-- READMEの日本語本文が文字化けしているため、必要なら読みやすい日本語に修復する。
 - 新しいスクリーンショットで不明セルや持ち駒誤認識が出た場合、`--debug` の切り出しを確認し、正しいラベルのテンプレートへ追加する。
 - 持ち駒数字 `9`, `11` から `18` は実戦上ほぼ不要という判断で保留中。
 - 手番の自動認識は後回し。現状はCLIの `--turn b` / `--turn w` 指定。
 - scrcpyからのリアルタイムキャプチャは未実装。
+- 盤面上端の自動検出は現状 `shogi-auto-cpu` 側で実装済み。このライブラリ本体へ移植する場合も、既存の固定座標config方式は残す。
 
 既知の注意点:
 - 後手龍 `w_+R` と後手馬 `w_+B` の混同が最も繰り返し出ている。赤い成駒文字が似ており、スコア差が小さいため閾値では弾きにくい。
@@ -190,13 +206,13 @@ OK
 ```
 
 まだ確認できていないこと:
-- READMEの文字化け修復。
 - リアルタイムキャプチャ、手番自動認識、複数アプリ対応。
 - さらに別日の局面・別表示条件での安定性。
+- ADB raw screenshot 用 `config_adb.yaml` の別解像度・別端末での安定性。
 
 ## 重要なファイル・ディレクトリ
 
-- `README.md`: ユーザー向け説明。現状、本文日本語が文字化けしているため修復候補。
+- `README.md`: ユーザー向け説明。`config_adb.yaml`、ADB raw screenshot、`shogi-auto-cpu` からの利用も記載。
 - `docs/ai_context.md`: AI作業引き継ぎ用。このファイル。
 - `shogi_sfen_reader.py`: CLI入口。
 - `src/`: 実装本体。
@@ -205,6 +221,7 @@ OK
 - `tests/kifu_positions.yaml`: 棋譜テキストとスクリーンショットのペアから正確性を検証するテストデータ。現在30件。
 - `config.yaml`: 通常画面用設定。
 - `config_taikyoku.yaml`: 観戦・再生画面用設定。
+- `config_adb.yaml`: ADB raw screenshot 用設定。現状は `1080x2400` 前提。
 - `templates/pieces/`: 駒テンプレート。
 - `templates/hand_digits/`: 持ち駒枚数の数字テンプレート。
 - `sample_images/`: サンプル画像。
@@ -266,3 +283,5 @@ OK
 - 2026-05-21: 検証済み20盤面が `kihu_tests/確認済/` に移動されたため、`tests/kifu_positions.yaml` のパスを更新。
 - 2026-05-21: 14時台の新規10盤面を検証。初回5件一致、4件は `w_+R` を `w_+B` と読む誤認識、1件は `b_+N` を `b_+S` と読む誤認識。`w_+R` テンプレート4件と `b_+N` テンプレート1件を追加し、10件すべて一致。
 - 2026-05-21: `tests/kifu_positions.yaml` を合計30件に更新。`python -m unittest discover -s tests` を実行し、`Ran 9 tests in 69.500s`, `OK` を確認。
+- 2026-05-23: `shogi-auto-cpu` 連携向けに ADB raw screenshot 対応を整理。`config_adb.yaml`、ADB由来テンプレート、`src/piece_recognizer.py` のベクトル化・空マスfallbackを `7e32fb0 Improve ADB screenshot recognition` として push 済み。
+- 2026-05-23: README と `docs/ai_context.md` を更新し、ADB raw screenshot、追加テンプレート、`shogi-auto-cpu` からの submodule 利用を記録。

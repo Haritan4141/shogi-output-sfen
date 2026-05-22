@@ -22,6 +22,13 @@ python shogi_sfen_reader.py sample_images\初期盤面.png --config config.yaml 
 python shogi_sfen_reader.py "sample_images\対局例\スクリーンショット 2026-05-19 032440.png" --config config_taikyoku.yaml --turn b
 ```
 
+Android 端末の raw screenshot を ADB で取得して使う場合は、`config_adb.yaml` を使います。この設定は `1080x2400` の `adb exec-out screencap -p` 画像を前提にしています。
+
+```powershell
+adb exec-out screencap -p > screen.png
+python shogi_sfen_reader.py screen.png --config config_adb.yaml --turn b
+```
+
 デバッグ用の切り出しを保存する場合:
 
 ```powershell
@@ -124,6 +131,17 @@ templates/pieces/
 
 現時点のサンプルでは、通常駒、主要な成駒、観戦・再生画面の持ち駒は一通り認識できる状態です。新しいスクリーンショットで不明セルが出た場合は、該当セルを正しいラベルのディレクトリへ追加してください。
 
+ADB raw screenshot で確認した低スコア事例として、以下のテンプレートも追加済みです。
+
+- `templates/pieces/b_+P/promoted_pawn_low_score_r3c7.png`
+- `templates/pieces/b_R/black_gold_hand_2_after_rook_capture_b_R_hand.png`
+- `templates/pieces/w_B/white_bishop_hand_2_w_B_hand.png`
+- `templates/pieces/w_R/white_rook_hand_after_capture_w_R_hand.png`
+- `templates/hand_digits/2/black_gold_hand_2_after_rook_capture_b_G.png`
+- `templates/hand_digits/2/white_bishop_hand_2_w_B.png`
+- `templates/hand_digits/2/white_gold_hand_2_after_gold_capture_w_G.png`
+- `templates/hand_digits/4/black_pawn_hand_4_b_P.png`
+
 注意: このアプリでは成銀・成桂・成香が赤い「全」「圭」「杏」のような崩し字で表示されます。似た形を誤ラベルで入れるとSFENが静かに間違うため、追加時はスクリーンショットの手順表示、局面、または手動メモで元の駒種を確認してください。数字は `1` は枚数表示なしとして扱うため不要ですが、`9`、`11` 以上などが画面に出た場合は追加してください。
 
 ## デバッグ
@@ -137,6 +155,12 @@ templates/pieces/
 - `recognition.json`: 各セル、各持ち駒スロット、数字認識の信頼度
 
 類似度が閾値未満の場合は不明として扱います。テンプレートを追加した直後は `piece_threshold` や `hand_piece_threshold` をやや低めにし、誤認識が出ない範囲で上げてください。
+
+## 認識処理の注意
+
+`src/piece_recognizer.py` は、読み込み済みテンプレートをベクトル化して一括照合します。テンプレート数が増えても毎セルの照合が極端に遅くなりにくいようにするためです。
+
+また、駒テンプレートの最高スコアが閾値未満でも、セル内に黒画素や赤画素がほとんどない場合は空マスとして扱う fallback があります。これは ADB raw screenshot の空マスが既存テンプレートと低スコアになるケースを吸収するためのものです。駒があるマスを空マス扱いしないよう、閾値を下げる前にデバッグ切り出しで確認してください。
 
 ## 複数局面の回帰テスト
 
@@ -178,3 +202,9 @@ CSA棋譜は `src/csa.py` で指定手数まで再生し、画像認識のSFEN�
 対象アプリは `C:\Tools\scrcpy-win64-v3.3.1\scrcpy.exe` でPC画面上に表示する前提です。scrcpyのウィンドウサイズやAndroid側の解像度が変わると座標も変わるため、同じ表示サイズでスクリーンショットを取り、必要に応じて `config.yaml` を調整してください。
 
 将来的なリアルタイム画面キャプチャや手番自動認識は、`src/board_detector.py`、`src/hand_detector.py`、`src/piece_recognizer.py`、`src/hand_recognizer.py` の境界を差し替える形で拡張できます。
+
+## shogi-auto-cpu からの利用
+
+`shogi-auto-cpu` は、このリポジトリを Git submodule として参照します。`shogi-auto-cpu` 側で自動対局を行う場合は、`configs/auto_cpu_adb.json` から `shogi-output-sfen/config_adb.yaml` を使う構成です。
+
+このリポジトリ単体では、画面クリックや将棋エンジン実行は行いません。スクリーンショットからSFENを出力するところまでが責務です。
