@@ -125,6 +125,9 @@ class RecognitionConfig:
     cell_crop_margin: int = 2
     slot_crop_margin: int = 0
     mode: str = "color"
+    promoted_red_check_enabled: bool = False
+    promoted_red_min_ratio: float = 0.25
+    promoted_red_score_margin: float = 0.12
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> "RecognitionConfig":
@@ -147,6 +150,9 @@ class RecognitionConfig:
             cell_crop_margin=int(data.get("cell_crop_margin", 2)),
             slot_crop_margin=int(data.get("slot_crop_margin", 0)),
             mode=mode,
+            promoted_red_check_enabled=bool(data.get("promoted_red_check_enabled", False)),
+            promoted_red_min_ratio=float(data.get("promoted_red_min_ratio", 0.25)),
+            promoted_red_score_margin=float(data.get("promoted_red_score_margin", 0.12)),
         )
 
 

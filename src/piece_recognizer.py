@@ -113,6 +113,7 @@ class PieceRecognizer:
             )
         scores = self.score_all(image)
         label, score = max(scores.items(), key=lambda item: item[1])
+        label, score = self._apply_red_ink_check(image, scores, label, score)
         parsed = self._template_by_label(label).parsed
         score_map = scores if include_scores else None
 
@@ -175,6 +176,35 @@ class PieceRecognizer:
                 continue
             labels.append(template.label)
         return sorted(set(labels))
+
+    def _apply_red_ink_check(
+        self,
+        image,
+        scores: dict[str, float],
+        label: str,
+        score: float,
+    ) -> tuple[str, float]:
+        if not self.config.promoted_red_check_enabled or self.config.mode != "color":
+            return label, score
+
+        parsed = self._template_by_label(label).parsed
+        if parsed.is_empty or not parsed.side or not parsed.kind:
+            return label, score
+
+        red_ratio = self._red_ink_ratio(image)
+        if parsed.kind.startswith("+"):
+            if red_ratio >= self.config.promoted_red_min_ratio:
+                return label, score
+            replacement = self._best_unpromoted_replacement(scores, parsed)
+        else:
+            if red_ratio < self.config.promoted_red_min_ratio:
+                return label, score
+            replacement = self._best_promoted_replacement(scores, parsed)
+        if replacement is not None:
+            replacement_label, replacement_score = replacement
+            if score - replacement_score <= self.config.promoted_red_score_margin:
+                return replacement_label, max(score, replacement_score)
+        return label, score
 
     def _load_templates(self, root: Path) -> list[Template]:
         if not root.exists():
@@ -246,6 +276,61 @@ class PieceRecognizer:
         if np.isnan(value):
             return -1.0
         return value
+
+    @staticmethod
+    def _red_ink_ratio(image) -> float:
+        resized = cv2.resize(image, (64, 64), interpolation=cv2.INTER_AREA)
+        hsv = cv2.cvtColor(resized, cv2.COLOR_BGR2HSV)
+        gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
+        red = (
+            ((hsv[:, :, 0] < 12) | (hsv[:, :, 0] > 168))
+            & (hsv[:, :, 1] > 45)
+            & (hsv[:, :, 2] > 40)
+        )
+        dark = (gray < 105) & ~red
+        ink = red | dark
+        return float(red.sum() / max(1, int(ink.sum())))
+
+    def _best_unpromoted_replacement(
+        self,
+        scores: dict[str, float],
+        parsed: ParsedLabel,
+    ) -> tuple[str, float] | None:
+        kinds = [parsed.kind.lstrip("+")]
+        if parsed.kind in {"+P", "+L", "+N", "+S"}:
+            kinds.append("G")
+
+        best: tuple[str, float] | None = None
+        for kind in kinds:
+            for candidate_label in self.labels_for(side=parsed.side, kind=kind):
+                candidate_score = scores.get(candidate_label)
+                if candidate_score is None:
+                    continue
+                if best is None or candidate_score > best[1]:
+                    best = (candidate_label, candidate_score)
+        return best
+
+    def _best_promoted_replacement(
+        self,
+        scores: dict[str, float],
+        parsed: ParsedLabel,
+    ) -> tuple[str, float] | None:
+        if parsed.kind in {"P", "L", "N", "S", "B", "R"}:
+            kinds = [f"+{parsed.kind}"]
+        elif parsed.kind == "G":
+            kinds = ["+P", "+L", "+N", "+S"]
+        else:
+            return None
+
+        best: tuple[str, float] | None = None
+        for kind in kinds:
+            for candidate_label in self.labels_for(side=parsed.side, kind=kind):
+                candidate_score = scores.get(candidate_label)
+                if candidate_score is None:
+                    continue
+                if best is None or candidate_score > best[1]:
+                    best = (candidate_label, candidate_score)
+        return best
 
     @staticmethod
     def _looks_empty_cell(image) -> bool:
